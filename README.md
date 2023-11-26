@@ -1,3 +1,47 @@
+# Deep Q-Learning Transformer Project with Efficient Architectures
+
+This project extends the original Deep Q-Learning Transformer model by integrating efficient Transformer architectures and advanced reinforcement learning techniques. The objective is to enhance performance in language-related tasks with a focus on efficient processing and sophisticated learning strategies.
+
+## Advanced Integration of Q-Learning and Transformers for Text Generation
+
+### Overview
+This implementation enhances the original model by integrating efficient Transformer variants like the Performer and incorporating advanced reinforcement learning techniques like Prioritized Replay Buffer and Double Q-Learning.
+
+### Key Enhancements
+
+#### Efficient Transformer
+- **EfficientTransformerQNetwork**: Incorporates Performer, an efficient Transformer variant, for handling longer sequences with reduced computational complexity.
+
+#### Advanced Replay Buffer
+- **PrioritizedReplayBuffer**: Improves upon standard replay buffer by prioritizing experiences based on their learning importance, leading to more efficient learning.
+
+#### State Representation
+- **StateEmbedding and StateAutoEncoder**: Modules for compressing the state representation, improving the efficiency of state processing in the Q-learning setup.
+
+#### Action Selection Strategy
+- **DoubleQLearningAgentUCB**: Integrates an Upper Confidence Bound (UCB) strategy for action selection, enhancing exploration efficiency.
+
+#### Hyperparameter Optimization
+- **Bayesian Optimization**: Used for hyperparameter tuning, optimizing the learning process.
+
+### Project Structure
+
+- `src/`
+  - `models/`
+    - `efficient_transformer.py`: Efficient Transformer model implementation.
+    - `state_embedding.py`: State embedding and autoencoder for state representation.
+  - `agents/`
+    - `dql_agent.py`: Double Q-Learning agent with UCB action selection.
+    - `replay_buffers.py`: Prioritized and standard replay buffer implementations.
+  - `utils/`
+    - `hyperparam_opt.py`: Hyperparameter optimization using Bayesian Optimization.
+  - `environments/`
+    - `custom_env.py`: Custom environments for the agent.
+- `train.py`: Main training script.
+- `validate.py`: Validation and evaluation script.
+- `requirements.txt`: Project dependencies.
+- `README.md`: Project documentation.
+
 # Deep Q-Learning Transformer Project
 
 This project integrates a Transformer model with a Deep Q-Learning algorithm to create a novel language processing model. The implementation is focused on harnessing the strengths of both architectures for improved performance in language-related tasks.
@@ -59,6 +103,8 @@ The implementation is an innovative fusion of Transformers and Deep Q-Learning, 
   - `training_loop.py`: Implements the training loop for the integrated model.
 - `main.py`: The main script to run the project, setting up the models, loading data, and initiating training.
 - `README.md`: This file, providing an overview and instructions for the project.
+
+
 
 ## Installation
 

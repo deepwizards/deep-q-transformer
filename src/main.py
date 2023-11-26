@@ -1,9 +1,13 @@
 import torch
-from torch.utils.data import DataLoader, IterableDataset
+from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 from src.transformer_model import PrunedTransformerModel
-from src.dql_model import EnhancedDQLModel, ExperienceReplay
-from src.training_loop import train_model
+from src.dql_model import EnhancedDQLModel  # Update as necessary for new DQL logic
+from src.training_loop import train_model   # Update as necessary for new training logic
+from src.agents.dql_agent import DoubleQLearningAgentUCB
+from src.models.efficient_transformer import EfficientTransformerQNetwork
+from src.models.state_embedding import StateEmbedding
+from src.agents.replay_buffers import PrioritizedReplayBuffer
 import os
 
 class StreamTextDataset(IterableDataset):
@@ -89,20 +93,28 @@ def main():
 
     try:
         tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-        transformer_model = PrunedTransformerModel('bert-base-uncased').to(device)
-        dq_learning_model = EnhancedDQLModel(input_dim=768, output_dim=10).to(device)
+        embedding_dim = 768  # Update as per your configuration
+        hidden_dim = 256     # Example hidden dimension
+        output_dim = 10      # Update as per your action space
+        n_layers = 3         # Number of layers in the transformer
+        n_heads = 4          # Number of heads in the transformer
+        lr = 1e-4            # Learning rate
+        gamma = 0.99         # Discount factor for Q-learning
+        buffer_size = 10000  # Size of the replay buffer
+        batch_size = 16      # Batch size for training
+
+        # Initialize models and agent
+        state_embedding = StateEmbedding(input_dim=embedding_dim, embedding_dim=embedding_dim).to(device)
+        transformer_model = EfficientTransformerQNetwork(embedding_dim, hidden_dim, output_dim, n_layers, n_heads).to(device)
+        dq_learning_agent = DoubleQLearningAgentUCB(input_dim=embedding_dim, hidden_dim=hidden_dim, output_dim=output_dim,
+                                                    n_layers=n_layers, n_heads=n_heads, lr=lr, gamma=gamma,
+                                                    buffer_size=buffer_size, batch_size=batch_size, embedding_dim=embedding_dim)
+
     except Exception as e:
         print(f"Error in model initialization: {e}")
         return
 
-    optimizer = torch.optim.Adam([
-        {'params': transformer_model.parameters(), 'lr': 1e-5},
-        {'params': dq_learning_model.parameters(), 'lr': 1e-4}
-    ])
-
-    replay_buffer = ExperienceReplay(capacity=10000)
     directory = 'data/train'  # Update with the actual directory path
-
     try:
         data_loader = load_data(directory, tokenizer)
     except Exception as e:
@@ -110,7 +122,6 @@ def main():
         return
 
     epochs = 10
-    train_model(transformer_model, dq_learning_model, optimizer, epochs, tokenizer, data_loader, replay_buffer, device)
-
+    train_model(transformer_model, dq_learning_agent, state_embedding, epochs, tokenizer, data_loader, device)
 if __name__ == "__main__":
     main()
