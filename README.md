@@ -42,11 +42,8 @@ This implementation enhances the original model by integrating efficient Transfo
 - `requirements.txt`: Project dependencies.
 - `README.md`: Project documentation.
 
-# Deep Q-Learning Transformer Project
 
-This project integrates a Transformer model with a Deep Q-Learning algorithm to create a novel language processing model. The implementation is focused on harnessing the strengths of both architectures for improved performance in language-related tasks.
-
-## Integration of Q-Learning and Transformers for Text Generation
+### Integration of Q-Learning and Transformers for Text Generation
 
 ```
 +---------------------+      +----------------------+
@@ -73,8 +70,8 @@ This project integrates a Transformer model with a Deep Q-Learning algorithm to 
 
 ```
 
-### Overview
-This implementation uniquely combines the concepts of Q-Learning and Deep Q-Networks (DQN) with Transformer models, aiming to create a robust system for text generation. Here's how the various components work together:
+### v1 Overview
+The first implementation uniquely combines the concepts of Q-Learning and Deep Q-Networks (DQN) with Transformer models, aiming to create a robust system for text generation. Here's how the various components work together:
 
 ### Deep Q-Learning in Text Generation
 - **DeepQLearningModel**: Represents a neural network to approximate the Q-function, crucial in Q-learning. It predicts the value of taking certain actions based on state representations provided by the Transformer model.
